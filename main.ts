@@ -28,17 +28,8 @@ class TextInputModal extends Modal {
   }
   
 export default class QuickCaptureToNotePlugin extends Plugin {
+
     async onload() {
-        this.addCommand({
-          id: 'quick-capture-to-note',
-          name: 'Quick Capture to Note',
-          callback: () => this.openCaptureModal(),
-        });
-    
-        this.registerObsidianProtocolHandler('quick-capture', () => {
-          this.openCaptureModal();
-        });
-      }  async onload() {
         this.addCommand({
           id: 'quick-capture-to-note',
           name: 'Quick Capture to Note',
