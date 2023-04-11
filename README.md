@@ -1,32 +1,4 @@
-
-
-
-
-To create a global shortcut for the Obsidian plugin that can be used from anywhere in the operating system, you'll need to use an external tool to set up a system-wide hotkey. This hotkey will then be used to trigger a custom URL that opens Obsidian and runs the plugin command. Here's how to do it for different operating systems:
-
-1. **Create a custom URL scheme for the plugin command:**
-
-First, you need to create a custom URL that will open Obsidian and execute the plugin command. This URL will be used by the external tool to trigger the plugin. Update the `onload` method in the `main.ts` file of your plugin to register a URL handler:
-
-```typescript
-async onload() {
-  this.registerObsidianProtocolHandler('quick-capture', async (params) => {
-    const targetNoteTitle = 'Inbox'; // You can change this to any note title you prefer
-    const targetNote = this.app.vault.getAbstractFileByPath(`${targetNoteTitle}.md`);
-    const capturedText = await this.promptForText();
-
-    if (capturedText) {
-      await this.appendTextToNote(targetNote, capturedText);
-    }
-  });
-
-  // ... rest of the onload method
-}
-```
-
-Now you can use the custom URL `obsidian://quick-capture` to trigger the plugin command.
-
-2. **Set up a global hotkey using an external tool:**
+**Set up a global hotkey using an external tool:**
 
 **For Windows:**
 
