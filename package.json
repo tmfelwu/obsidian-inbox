@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "typescript": "^5.0.4"
+  },
+  "devDependencies": {
+    "obsidian": "^0.12.0"
+  }
+}

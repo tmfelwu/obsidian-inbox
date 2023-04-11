@@ -1,0 +1,8 @@
+{
+    "id": "obsidian-inbox",
+    "name": "Obsidian Inbox",
+    "version": "0.1.0",
+    "author": "Sparsh",
+    "description": "Quickly capture text and append it to the end of a note.",
+    "minAppVersion": "0.12.0"
+  }
