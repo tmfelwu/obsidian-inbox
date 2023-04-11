@@ -1,8 +1,8 @@
 {
-    "id": "obsidian-inbox",
-    "name": "Obsidian Inbox",
-    "version": "0.1.0",
-    "author": "Sparsh",
-    "description": "Quickly capture text and append it to the end of a note.",
+    "id": "quickly",
+    "name": "Quickly",
+    "version": "0.1.1",
+    "author": "Sparsh Yadav",
+    "description": "Quickly empowers you to add your thoughts into obsidian with a shortcut key.",
     "minAppVersion": "0.12.0"
   }
