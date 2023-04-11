@@ -1,3 +1,11 @@
+
+# Defaults
+- There should be a file `Inbox` at the root of the vault.
+- When you use the associated shortcut a modal opens up to pasete your thought.
+- Presss `Ctrl+Enter` to add it to `Inbox`
+
+# Setup for OS to associate shortcut key
+
 **Set up a global hotkey using an external tool:**
 
 **For Windows:**

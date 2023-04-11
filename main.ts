@@ -1,5 +1,6 @@
 import { Plugin, Modal } from 'obsidian';
 
+
 class TextInputModal extends Modal {
     private textarea: HTMLTextAreaElement;
   
@@ -67,7 +68,4 @@ export default class QuickCaptureToNotePlugin extends Plugin {
       console.error('Target note not found');
     }
   }
-  
-  
-  
 }
