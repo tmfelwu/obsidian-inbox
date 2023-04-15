@@ -2,8 +2,6 @@
 # Edit at https://www.toptal.com/developers/gitignore?templates=obsidian,node
 
 
-main.js
-
 ### Node ###
 # Logs
 logs
