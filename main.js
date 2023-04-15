@@ -61,14 +61,30 @@ var TextInputModal = /** @class */ (function (_super) {
     }
     TextInputModal.prototype.onOpen = function () {
         var _this = this;
-        // Title Input
+        // Create a container for better layout control
+        var container = document.createElement('div');
+        container.style.display = 'flex';
+        container.style.flexDirection = 'column';
+        container.style.gap = '1rem';
+        this.contentEl.appendChild(container);
+        // Add a title input field
         this.titleInput = document.createElement('input');
         this.titleInput.type = 'text';
         this.titleInput.placeholder = 'Enter note title';
-        this.contentEl.appendChild(this.titleInput);
+        this.titleInput.style.fontSize = '1.1em';
+        this.titleInput.style.padding = '0.5rem';
+        this.titleInput.style.border = '1px solid var(--text-faint)';
+        this.titleInput.style.borderRadius = '4px';
+        container.appendChild(this.titleInput);
+        // Add a textarea for note content
         this.textarea = document.createElement('textarea');
         this.textarea.rows = 5;
-        this.textarea.placeholder = 'Enter to capture';
+        this.textarea.placeholder = 'Enter note content';
+        this.textarea.style.fontSize = '1em';
+        this.textarea.style.padding = '0.5rem';
+        this.textarea.style.border = '1px solid var(--text-faint)';
+        this.textarea.style.borderRadius = '4px';
+        this.textarea.style.resize = 'vertical';
         this.textarea.addEventListener('keydown', function (event) {
             if (event.key === 'Enter' && event.ctrlKey) {
                 _this.onSubmit(_this.titleInput.value, _this.textarea.value);
@@ -78,7 +94,7 @@ var TextInputModal = /** @class */ (function (_super) {
                 _this.close();
             }
         });
-        this.contentEl.appendChild(this.textarea);
+        container.appendChild(this.textarea);
     };
     TextInputModal.prototype.onClose = function () {
         this.titleInput.remove();
