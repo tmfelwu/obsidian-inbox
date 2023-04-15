@@ -1,9 +1,11 @@
-import { Plugin, Modal } from 'obsidian';
+import { App, Plugin, Modal } from 'obsidian';
 
 
 class TextInputModal extends Modal {
   private titleInput: HTMLInputElement;
   private textarea: HTMLTextAreaElement;
+  private datalist: HTMLDataListElement;
+  private submitButton: HTMLButtonElement;
 
   constructor(app, private onSubmit: (title: string, value: string) => void) {
     super(app);
@@ -29,35 +31,33 @@ class TextInputModal extends Modal {
     container.appendChild(this.titleInput);
 
 
-    // Add a dropdown for existing notes
-    this.dropdown = document.createElement('select');
-    this.dropdown.style.display = 'none';
-    this.dropdown.style.marginTop = '0.5rem';
-    this.dropdown.style.fontSize = '1em';
-    this.dropdown.style.padding = '0.5rem';
-    this.dropdown.style.border = '1px solid var(--text-faint)';
-    this.dropdown.style.borderRadius = '4px';
-    container.appendChild(this.dropdown);
+    // Add a datalist for existing notes
+    this.datalist = document.createElement('datalist');
+    this.datalist.id = 'note-titles';
+    container.appendChild(this.datalist);
 
-    // Populate the dropdown and open the note on selection
-    this.titleInput.addEventListener('input', (event) => {
-      const matchingNotes = this.app.vault.getMarkdownFiles().filter((note) => note.basename.toLowerCase().startsWith(event.target.value.toLowerCase()));
-      this.dropdown.innerHTML = '';
-      if (matchingNotes.length > 0) {
-        this.dropdown.style.display = 'block';
-        for (const note of matchingNotes) {
-          const option = document.createElement('option');
-          option.value = note.path;
-          option.textContent = note.basename;
-          this.dropdown.appendChild(option);
-        }
-      } else {
-        this.dropdown.style.display = 'none';
+    // Set the list attribute for the title input field
+    this.titleInput.setAttribute('list', 'note-titles');
+    // Populate the datalist with note titles
+    const noteTitles = this.app.vault.getMarkdownFiles().map((note) => note.basename);
+    const maxItems = 10;
+    let itemCount = 0;
+
+    for (const title of noteTitles) {
+      if (itemCount >= maxItems) {
+        break;
       }
-    });
 
-    this.dropdown.addEventListener('change', (event) => {
-      const selectedNote = this.app.vault.getAbstractFileByPath(event.target.value);
+      const option = document.createElement('option');
+      option.value = title;
+      this.datalist.appendChild(option);
+      itemCount++;
+    }
+
+    // Navigate to the selected note from the datalist
+    this.titleInput.addEventListener('change', (event) => {
+      const selectedTitle = event.target.value;
+      const selectedNote = this.app.vault.getAbstractFileByPath(`${selectedTitle}.md`);
       if (selectedNote) {
         this.close();
         this.app.workspace.activeLeaf.openFile(selectedNote);
@@ -73,15 +73,32 @@ class TextInputModal extends Modal {
     this.textarea.style.border = '1px solid var(--text-faint)';
     this.textarea.style.borderRadius = '4px';
     this.textarea.style.resize = 'vertical';
-    this.textarea.addEventListener('keydown', (event) => {
-      if (event.key === 'Enter' && event.ctrlKey) {
-        this.onSubmit(this.titleInput.value, this.textarea.value);
-        this.close();
-      } else if (event.key === 'Escape') {
-        this.close();
-      }
-    });
+    // this.textarea.addEventListener('keydown', (event) => {
+    //   if (event.key === 'Enter' && event.ctrlKey) {
+    //     this.onSubmit(this.titleInput.value, this.textarea.value);
+    //     this.close();
+    //   } else if (event.key === 'Escape') {
+    //     this.close();
+    //   }
+    // });
     container.appendChild(this.textarea);
+
+    // Add a submit button
+    this.submitButton = document.createElement('button');
+    this.submitButton.textContent = 'Submit';
+    this.submitButton.style.fontSize = '1em';
+    this.submitButton.style.padding = '0.5rem';
+    this.submitButton.style.marginTop = '1rem';
+    this.submitButton.style.border = '1px solid var(--text-faint)';
+    this.submitButton.style.borderRadius = '4px';
+    this.submitButton.style.cursor = 'pointer';
+    this.submitButton.style.backgroundColor = 'var(--background-secondary)';
+    this.submitButton.addEventListener('click', () => {
+      this.onSubmit(this.titleInput.value, this.textarea.value);
+      this.close();
+    });
+    container.appendChild(this.submitButton);
+
   }
 
   onClose() {
@@ -111,7 +128,16 @@ export default class QuickCaptureToNotePlugin extends Plugin {
       if (title && content) {
         await this.createNoteWithTitle(title, content);
       }
+      // If only title is provided, open the existing note
+      if (title && !content) {
+        const existingNote = this.app.vault.getAbstractFileByPath(`${title}.md`);
+        if (existingNote) {
+          this.app.workspace.activeLeaf.openFile(existingNote);
+        }
+      }
+
     });
+
     modal.open();
   }
 

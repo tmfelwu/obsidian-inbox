@@ -77,35 +77,30 @@ var TextInputModal = /** @class */ (function (_super) {
         this.titleInput.style.border = '1px solid var(--text-faint)';
         this.titleInput.style.borderRadius = '4px';
         container.appendChild(this.titleInput);
-        // Add a dropdown for existing notes
-        this.dropdown = document.createElement('select');
-        this.dropdown.style.display = 'none';
-        this.dropdown.style.marginTop = '0.5rem';
-        this.dropdown.style.fontSize = '1em';
-        this.dropdown.style.padding = '0.5rem';
-        this.dropdown.style.border = '1px solid var(--text-faint)';
-        this.dropdown.style.borderRadius = '4px';
-        container.appendChild(this.dropdown);
-        // Populate the dropdown and open the note on selection
-        this.titleInput.addEventListener('input', function (event) {
-            var matchingNotes = _this.app.vault.getMarkdownFiles().filter(function (note) { return note.basename.toLowerCase().startsWith(event.target.value.toLowerCase()); });
-            _this.dropdown.innerHTML = '';
-            if (matchingNotes.length > 0) {
-                _this.dropdown.style.display = 'block';
-                for (var _i = 0, matchingNotes_1 = matchingNotes; _i < matchingNotes_1.length; _i++) {
-                    var note = matchingNotes_1[_i];
-                    var option = document.createElement('option');
-                    option.value = note.path;
-                    option.textContent = note.basename;
-                    _this.dropdown.appendChild(option);
-                }
+        // Add a datalist for existing notes
+        this.datalist = document.createElement('datalist');
+        this.datalist.id = 'note-titles';
+        container.appendChild(this.datalist);
+        // Set the list attribute for the title input field
+        this.titleInput.setAttribute('list', 'note-titles');
+        // Populate the datalist with note titles
+        var noteTitles = this.app.vault.getMarkdownFiles().map(function (note) { return note.basename; });
+        var maxItems = 10;
+        var itemCount = 0;
+        for (var _i = 0, noteTitles_1 = noteTitles; _i < noteTitles_1.length; _i++) {
+            var title = noteTitles_1[_i];
+            if (itemCount >= maxItems) {
+                break;
             }
-            else {
-                _this.dropdown.style.display = 'none';
-            }
-        });
-        this.dropdown.addEventListener('change', function (event) {
-            var selectedNote = _this.app.vault.getAbstractFileByPath(event.target.value);
+            var option = document.createElement('option');
+            option.value = title;
+            this.datalist.appendChild(option);
+            itemCount++;
+        }
+        // Navigate to the selected note from the datalist
+        this.titleInput.addEventListener('change', function (event) {
+            var selectedTitle = event.target.value;
+            var selectedNote = _this.app.vault.getAbstractFileByPath("".concat(selectedTitle, ".md"));
             if (selectedNote) {
                 _this.close();
                 _this.app.workspace.activeLeaf.openFile(selectedNote);
@@ -120,16 +115,30 @@ var TextInputModal = /** @class */ (function (_super) {
         this.textarea.style.border = '1px solid var(--text-faint)';
         this.textarea.style.borderRadius = '4px';
         this.textarea.style.resize = 'vertical';
-        this.textarea.addEventListener('keydown', function (event) {
-            if (event.key === 'Enter' && event.ctrlKey) {
-                _this.onSubmit(_this.titleInput.value, _this.textarea.value);
-                _this.close();
-            }
-            else if (event.key === 'Escape') {
-                _this.close();
-            }
-        });
+        // this.textarea.addEventListener('keydown', (event) => {
+        //   if (event.key === 'Enter' && event.ctrlKey) {
+        //     this.onSubmit(this.titleInput.value, this.textarea.value);
+        //     this.close();
+        //   } else if (event.key === 'Escape') {
+        //     this.close();
+        //   }
+        // });
         container.appendChild(this.textarea);
+        // Add a submit button
+        this.submitButton = document.createElement('button');
+        this.submitButton.textContent = 'Submit';
+        this.submitButton.style.fontSize = '1em';
+        this.submitButton.style.padding = '0.5rem';
+        this.submitButton.style.marginTop = '1rem';
+        this.submitButton.style.border = '1px solid var(--text-faint)';
+        this.submitButton.style.borderRadius = '4px';
+        this.submitButton.style.cursor = 'pointer';
+        this.submitButton.style.backgroundColor = 'var(--background-secondary)';
+        this.submitButton.addEventListener('click', function () {
+            _this.onSubmit(_this.titleInput.value, _this.textarea.value);
+            _this.close();
+        });
+        container.appendChild(this.submitButton);
     };
     TextInputModal.prototype.onClose = function () {
         this.titleInput.remove();
@@ -163,6 +172,7 @@ var QuickCaptureToNotePlugin = /** @class */ (function (_super) {
     QuickCaptureToNotePlugin.prototype.openCaptureModal = function () {
         var _this = this;
         var modal = new TextInputModal(this.app, function (title, content) { return __awaiter(_this, void 0, void 0, function () {
+            var existingNote;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -171,7 +181,15 @@ var QuickCaptureToNotePlugin = /** @class */ (function (_super) {
                     case 1:
                         _a.sent();
                         _a.label = 2;
-                    case 2: return [2 /*return*/];
+                    case 2:
+                        // If only title is provided, open the existing note
+                        if (title && !content) {
+                            existingNote = this.app.vault.getAbstractFileByPath("".concat(title, ".md"));
+                            if (existingNote) {
+                                this.app.workspace.activeLeaf.openFile(existingNote);
+                            }
+                        }
+                        return [2 /*return*/];
                 }
             });
         }); });
