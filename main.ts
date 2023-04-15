@@ -15,6 +15,7 @@ class TextInputModal extends Modal {
     container.style.display = 'flex';
     container.style.flexDirection = 'column';
     container.style.gap = '1rem';
+    container.style.padding = '1rem';
     this.contentEl.appendChild(container);
 
     // Add a title input field
@@ -26,6 +27,42 @@ class TextInputModal extends Modal {
     this.titleInput.style.border = '1px solid var(--text-faint)';
     this.titleInput.style.borderRadius = '4px';
     container.appendChild(this.titleInput);
+
+
+    // Add a dropdown for existing notes
+    this.dropdown = document.createElement('select');
+    this.dropdown.style.display = 'none';
+    this.dropdown.style.marginTop = '0.5rem';
+    this.dropdown.style.fontSize = '1em';
+    this.dropdown.style.padding = '0.5rem';
+    this.dropdown.style.border = '1px solid var(--text-faint)';
+    this.dropdown.style.borderRadius = '4px';
+    container.appendChild(this.dropdown);
+
+    // Populate the dropdown and open the note on selection
+    this.titleInput.addEventListener('input', (event) => {
+      const matchingNotes = this.app.vault.getMarkdownFiles().filter((note) => note.basename.toLowerCase().startsWith(event.target.value.toLowerCase()));
+      this.dropdown.innerHTML = '';
+      if (matchingNotes.length > 0) {
+        this.dropdown.style.display = 'block';
+        for (const note of matchingNotes) {
+          const option = document.createElement('option');
+          option.value = note.path;
+          option.textContent = note.basename;
+          this.dropdown.appendChild(option);
+        }
+      } else {
+        this.dropdown.style.display = 'none';
+      }
+    });
+
+    this.dropdown.addEventListener('change', (event) => {
+      const selectedNote = this.app.vault.getAbstractFileByPath(event.target.value);
+      if (selectedNote) {
+        this.close();
+        this.app.workspace.activeLeaf.openFile(selectedNote);
+      }
+    });
 
     // Add a textarea for note content
     this.textarea = document.createElement('textarea');
