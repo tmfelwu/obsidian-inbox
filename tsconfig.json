@@ -4,8 +4,10 @@
     "module": "commonjs",
     "strict": true,
     "esModuleInterop": true,
-    "moduleResolution": "node"
+    "moduleResolution": "node",
+    "skipLibCheck": true,
+    "strictPropertyInitialization": false
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "main.ts"],
   "exclude": ["node_modules", "**/*.test.ts"]
 }

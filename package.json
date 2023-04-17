@@ -1,8 +1,10 @@
 {
-  "dependencies": {
+  "devDependencies": {
+    "@types/codemirror": "^5.60.7",
+    "obsidian": "^0.12.0",
     "typescript": "^5.0.4"
   },
-  "devDependencies": {
-    "obsidian": "^0.12.0"
+  "scripts": {
+    "build": "tsc"
   }
 }

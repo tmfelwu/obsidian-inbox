@@ -1,8 +1,21 @@
 
-# Defaults
-- There should be a file `Inbox` at the root of the vault.
-- When you use the associated shortcut a modal opens up to pasete your thought.
-- Presss `Ctrl+Enter` to add it to `Inbox`
+# Usage logic
+
+- [x] Use the shortcut key will trigger the plugin. 
+- [x] A modal will open with 'Note Title', 'Note Body' and 'Submit Button'
+- [ ] As user types the datalist will show relevant `note path` in the Vault.
+- [x] Navigation
+  - [x] If the user press `Enter` while the datalist length > 0 the first item in current datalist will be navigated to.
+  - [x] Another way is to use up and down arrow key and press `Enter`
+- Create New Notes
+  - If content is empty and note of the same name doesnt exist
+    - [x] Create New Note
+  - If content is present.
+    - [ ] If note exists with similar name give Notice error.
+    - [ ] If note doesnt exist with same name, create the note with content.
+- Creating the new notes
+  - Press `Ctrl+Enter` or
+  - Press `Submit` button at the bottom.
 
 # Setup for OS to associate shortcut key
 
@@ -54,3 +67,7 @@ On Ubuntu 22.04, you can set up a global hotkey to trigger the Obsidian plugin c
 8. Close the settings application.
 
 Now the global hotkey should be active and trigger the plugin command from anywhere in your operating system.
+
+
+# Conversation 
+Naman - https://chat.openai.com/c/3021e291-47a7-44b0-a0f6-7cc4ad58ba67
