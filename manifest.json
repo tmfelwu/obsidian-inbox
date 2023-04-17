@@ -1,7 +1,7 @@
 {
     "id": "quickly",
     "name": "Quickly",
-    "version": "0.1.1",
+    "version": "0.1.2",
     "author": "Sparsh Yadav",
     "description": "Quickly empowers you to add your thoughts into obsidian with a shortcut key.",
     "minAppVersion": "0.12.0"
