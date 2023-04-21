@@ -21,14 +21,14 @@ class TextInputModal extends Modal {
   onOpen() {
     // Create a container for better layout control
     const container = document.createElement('div');
-    container.classList.add('container');
+    container.classList.add('quickly-plugin-container');
     this.contentEl.appendChild(container);
 
     // Add a title input field
     this.titleInput = document.createElement('input');
     this.titleInput.type = 'text';
     this.titleInput.placeholder = 'Enter note title';
-    this.titleInput.classList.add('title-input');
+    this.titleInput.classList.add('quickly-plugin-title-input');
     container.appendChild(this.titleInput);
 
 
@@ -37,7 +37,9 @@ class TextInputModal extends Modal {
     this.datalist.id = 'note-titles';
     container.appendChild(this.datalist);
     const noteTitles = this.app.vault.getMarkdownFiles().map((note) => note.basename);
-    const notePaths = this.app.vault.getMarkdownFiles().map((note) => note.path);
+
+    // Not used for now
+    // const notePaths = this.app.vault.getMarkdownFiles().map((note) => note.path);
 
     // Function to update the datalist with matching note titles
     const updateDatalist = (searchText: string) => {
@@ -107,7 +109,7 @@ class TextInputModal extends Modal {
     this.textarea = document.createElement('textarea');
     this.textarea.rows = 5;
     this.textarea.placeholder = 'Enter note content';
-    this.textarea.classList.add('textarea-custom');
+    this.textarea.classList.add('quickly-plugin-textarea-custom');
     this.textarea.addEventListener('keydown', (event) => {
       if (event.key === 'Enter' && event.ctrlKey) {
         this.onSubmit(this.titleInput.value, this.textarea.value);
@@ -121,13 +123,7 @@ class TextInputModal extends Modal {
     // Add a submit button
     this.submitButton = document.createElement('button');
     this.submitButton.textContent = 'Submit';
-    this.submitButton.style.fontSize = '1em';
-    this.submitButton.style.padding = '0.5rem';
-    this.submitButton.style.marginTop = '1rem';
-    this.submitButton.style.border = '1px solid var(--text-faint)';
-    this.submitButton.style.borderRadius = '4px';
-    this.submitButton.style.cursor = 'pointer';
-    this.submitButton.style.backgroundColor = 'var(--background-secondary)';
+    this.submitButton.classList.add('quickly-plugin-submit-button');
     this.submitButton.addEventListener('click', () => {
       this.onSubmit(this.titleInput.value, this.textarea.value);
       this.close();
@@ -183,10 +179,14 @@ export default class QuickCaptureToNotePlugin extends Plugin {
       if (!note) {
 
         // Create new note
-        await this.app.vault.create(`${title}.md`, content);
+        let noteRef = await this.app.vault.create(`${title}.md`, content);
+
+        // Close the modal before navigating to the selected note
+        let  newLeaf = this.app.workspace.getLeaf(false)
+        await newLeaf.openFile(noteRef); 
 
         // Navigate to note after creation
-        this.navigateToSelectedNote(title)
+        // this.navigateToSelectedNote(title)
 
       } else {
         console.error('Note with the same title already exists');
@@ -240,7 +240,3 @@ export default class QuickCaptureToNotePlugin extends Plugin {
 
   
 }
-
-
-//Function to upload file to s3 bucket
-//function

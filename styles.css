@@ -1,21 +1,32 @@
-.container {
+.quickly-plugin-container {
     display: flex;
     flex-direction: column;
     gap: 1rem;
     padding: 1rem;
 }
 
-.title-input {
+.quickly-plugin-title-input {
     font-size: 1.1em;
     padding: 0.5rem;
     border: 1px solid var(--text-faint);
     border-radius: 4px;
 }
 
-.textarea-custom {
+.quickly-plugin-textarea-custom {
     font-size: 1em;
     padding: 0.5rem;
     border: 1px solid var(--text-faint);
     border-radius: 4px;
     resize: vertical;
+}
+
+
+.quickly-plugin-submit-button {
+    font-size: 1em;
+    padding: 0.5rem;
+    margin-top: 1rem;
+    border: 1px solid var(--text-faint);
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: var(--background-modifier-hover);
 }
