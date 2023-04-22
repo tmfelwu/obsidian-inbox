@@ -1,4 +1,7 @@
 
+Any feature request/ suggestion for improvement please open [here](https://github.com/tmfelwu/obsidian-inbox/issues). 
+https://github.com/tmfelwu/obsidian-inbox/issues
+
 # Usage logic
 
 - [x] Use the shortcut key will trigger the plugin. 
