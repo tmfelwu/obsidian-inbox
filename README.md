@@ -2,6 +2,12 @@
 Any feature request/ suggestion for improvement please open [here](https://github.com/tmfelwu/obsidian-inbox/issues). 
 https://github.com/tmfelwu/obsidian-inbox/issues
 
+# Demo
+
+The shortcut key launches this modal.
+
+![Demo](./demo.png)
+
 # Usage logic
 
 - [x] Use the shortcut key will trigger the plugin. 
